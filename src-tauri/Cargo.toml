@@ -1,5 +1,5 @@
 [package]
-name = "nbt-explorer"
+name = "nbt-lupe"
 version = "0.0.0"
 description = "A Tauri App"
 authors = ["you"]
@@ -13,7 +13,7 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [ "clipboard-all", "dialog-confirm", "dialog-open", "dialog-save", "dialog-message", "dialog-ask", "fs-all", "shell-open"] }
+tauri = { version = "1.4", features = [ "cli", "window-set-title", "clipboard-all", "dialog-confirm", "dialog-open", "dialog-save", "dialog-message", "dialog-ask", "fs-all", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 quartz_nbt = { version = "0.2.8", features = ["serde"], path = "../quartz_nbt" }

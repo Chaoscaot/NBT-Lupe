@@ -1,0 +1,31 @@
+{
+  "app-id": "de.chaoscaot.nbt",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "44",
+  "sdk": "org.gnome.Sdk",
+  "command": "nbt-lupe",
+  "finish-args": [
+    "--socket=x11",
+    "--share=ipc",
+    "--socket=wayland",
+    "--filesystem=host"],
+  "modules": [
+    {
+      "name": "nbt-lupe",
+      "buildsystem": "simple",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/Chaoscaot/NBT-Lupe.git"
+        }
+      ],
+      "build-commands": [
+        "npm tauri build",
+        "install -D -m 755 target/release/nbt-lupe /app/bin/nbt-lupe"
+      ]
+    },
+    {
+
+    }
+  ]
+}

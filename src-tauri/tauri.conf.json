@@ -7,10 +7,20 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "nbt-explorer",
-    "version": "0.0.0"
+    "productName": "nbt-lupe",
+    "version": "1.0.0"
   },
   "tauri": {
+    "cli": {
+      "description": "NBT Lupe - Modern NBT Editor",
+      "args": [
+        {
+          "name": "file",
+          "index": 1,
+          "takesValue": true
+        }
+      ]
+    },
     "allowlist": {
       "all": false,
       "shell": {
@@ -30,6 +40,9 @@
         "message": true,
         "ask": true,
         "confirm": true
+      },
+      "window": {
+        "setTitle": true
       }
     },
     "bundle": {
