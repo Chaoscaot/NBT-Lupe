@@ -1,0 +1,3 @@
+[submodule "quartz_nbt"]
+	path = quartz_nbt
+	url = https://github.com/Chaoscaot/quartz_nbt
