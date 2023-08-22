@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {dialog} from "@tauri-apps/api";
+    import {dialog, shell} from "@tauri-apps/api";
     import {invoke} from "@tauri-apps/api/tauri";
     import NBTCompoundTag from "./lib/NBTCompoundTag.svelte";
     import {changed, globalNbt, openFile} from "./stores/nbt";
@@ -40,6 +40,9 @@
                         saveAs(value)
                     })
                     break
+                }
+                case "gh": {
+                    shell.open("https://github.com/Chaoscaot/NBT-Lupe")
                 }
             }
         })

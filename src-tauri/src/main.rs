@@ -82,7 +82,10 @@ fn main() {
     let exit = CustomMenuItem::new("exit", "Exit").accelerator("CmdOrControl+Q");
     let file = Submenu::new("File", Menu::new().add_item(open).add_item(save).add_item(save_as).add_item(reload).add_item(exit));
 
-    let menu = Menu::new().add_submenu(file);
+    let gh = CustomMenuItem::new("gh", "GitHub");
+    let help = Submenu::new("Help", Menu::new().add_item(gh));
+
+    let menu = Menu::new().add_submenu(file).add_submenu(help);
 
     tauri::Builder::default()
         .menu(menu)
