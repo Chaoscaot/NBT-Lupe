@@ -14,8 +14,23 @@
                     handleClick()
                     break
                 }
+                case "reload": {
+                    if ($openFile) {
+                        oFile($openFile)
+                    }
+                    break
+                }
                 case "save": {
-                    saveAs($openFile)
+                    if ($openFile) {
+                        saveAs($openFile)
+                    } else {
+                        dialog.save({
+                            title: "Save NBT file"
+                        }).then(value => {
+                            saveAs(value)
+                            openFile.set(value)
+                        })
+                    }
                     break
                 }
                 case "save-as": {
@@ -24,6 +39,7 @@
                     }).then(value => {
                         saveAs(value)
                     })
+                    break
                 }
             }
         })
@@ -42,9 +58,40 @@
         }
     })
 
+    window.addEventListener("keypress", ev => {
+        if (ev.ctrlKey) {
+            switch (ev.key) {
+                case "s": {
+                    if ($openFile) {
+                        saveAs($openFile)
+                    } else {
+                        dialog.save({
+                            title: "Save NBT file"
+                        }).then(value => {
+                            saveAs(value)
+                            openFile.set(value)
+                        })
+                    }
+                    break
+                }
+                case "o": {
+                    handleClick()
+                    break
+                }
+                case "r": {
+                    if ($openFile) {
+                        oFile($openFile)
+                    }
+                    break
+                }
+            }
+        }
+    })
+
     async function saveAs(file: string) {
         console.log("Saving to", file)
         await invoke("save_as_fun", {file: file, nbt: $globalNbt})
+        changed.set(false)
     }
 
     async function oFile(file: string) {
@@ -66,7 +113,7 @@
         }
     }
 
-    $: if (openFile) {
+    $: if ($openFile) {
         appWindow.setTitle("NBT Lupe - " + ($changed ? '*' : '') + $openFile)
     } else {
         appWindow.setTitle("NBT Lupe")

@@ -69,10 +69,8 @@ fn save_as_fun(file: String, nbt: Value) -> Result<(), ()> {
 
     let tag = to_compound(nbt.as_object().unwrap().clone());
 
-    println!("Saving to {}", file);
     let mut file = std::fs::File::create(file).unwrap();
     io::write_nbt(&mut file, None, &tag, Flavor::GzCompressed).unwrap();
-    println!("Saved");
     return Ok(());
 }
 

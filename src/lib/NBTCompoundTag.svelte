@@ -15,7 +15,7 @@
     function addTag(type: string) {
         return () => {
             globalNbt.update(v => {
-                let current: NBT = v[path[0] ?? name];
+                let current: NBT = path.length > 0 ? v[path[0]] : null;
                 let parent: { [key: string]: NBT } = v;
                 for (let i = 1; i < path.length; i++) {
                     if (current["0"] === "List") {
