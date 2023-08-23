@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "nbt-lupe",
-    "version": "1.0.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "cli": {
@@ -64,9 +64,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "NBT Lupe",
-        "width": 800,
-        "height": 600
+        "title": "NBT Lupe"
       }
     ]
   }

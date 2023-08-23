@@ -8,7 +8,7 @@
     export let path: string[];
 </script>
 
-<li>
+<li id={path.join("/")}>
     {#if data.length < 50}
         <details open={data.length < 5}>
             <summary><TypeIcon char={`${type.charAt(0)}A`} />{name} [{data.length}]</summary>

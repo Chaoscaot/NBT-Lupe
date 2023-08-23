@@ -97,12 +97,13 @@
     }
 </script>
 
-<li>
+<li id={path.join("/")}>
     <a on:click={open} on:contextmenu|preventDefault={context.openContext}><TypeIcon char={type.at(0)} />{name}: {type === "String" ? `"${value}"` : value}</a>
 </li>
 
 <ContextMenu bind:this={context}>
-    <li class="menu-title">{path.join("/")}</li>
+    <li class="menu-title">{name}</li>
+    <li><a href="#" on:click|preventDefault={() => {context.close(); open()}}><TypeIcon color="bg-blue-500" char="E" />Edit</a></li>
     <li><a href="#" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
 </ContextMenu>
 

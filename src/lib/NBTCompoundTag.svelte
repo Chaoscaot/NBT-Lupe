@@ -79,6 +79,7 @@
     function openRename() {
         context.close();
         dialog.showModal();
+        nameIn.setSelectionRange(0, nameIn.value.length);
     }
 
     function rename() {
@@ -112,11 +113,20 @@
     }
 
     let context: ContextMenu;
+    let nameIn: HTMLInputElement;
+
+    function middleClick(e: MouseEvent) {
+        if (e.button === 1 && path.length > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            openRename()
+        }
+    }
 </script>
 
-<li>
+<li id={path.join("/")}>
     <details open={Object.entries(nbt).length < 15}>
-        <summary on:contextmenu|preventDefault={context.openContext}><TypeIcon char="C"/>{name} [{Object.keys(nbt).length}]</summary>
+        <summary on:contextmenu|preventDefault={context.openContext} on:click={middleClick}><TypeIcon char="C"/>{name} [{Object.keys(nbt).length}]</summary>
         <ul>
             {#each Object.entries(nbt) as [key, tag]}
                 <NBTTag type={tag[0]} name={key} nbt={tag[1]} path={[...path, key]} />
@@ -130,7 +140,7 @@
         <h1 class="mb-4">Edit {name}</h1>
         <div class="flex flex-col gap-4">
             <label class="label">Name</label>
-            <input type="text" bind:value={nameEdit} class="input input-bordered w-full max-w-xs" />
+            <input type="text" bind:value={nameEdit} class="input input-bordered w-full max-w-xs" bind:this={nameIn} />
         </div>
         <div class="modal-action">
             <button class="btn" on:click={reset}>Cancel</button>
@@ -143,7 +153,7 @@
 </dialog>
 
 <ContextMenu bind:this={context}>
-    <li class="menu-title">{path.length > 0 ? path.join("/") : name}</li>
+    <li class="menu-title">{name}</li>
     <li><a href="#" on:click|preventDefault={addTag("Compound")}><TypeIcon char="C" />Add Compound</a></li>
     <li><a href="#" on:click|preventDefault={addTag("List")}><TypeIcon char="L" />Add List</a></li>
     <li><a href="#" on:click|preventDefault={addTag("Byte")}><TypeIcon char="B" />Byte</a></li>

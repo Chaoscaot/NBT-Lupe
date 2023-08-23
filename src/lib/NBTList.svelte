@@ -79,9 +79,9 @@
     }
 </script>
 
-<li>
+<li id={path.join("/")}>
     <details>
-        <summary on:contextmenu|preventDefault={context.openContext}><TypeIcon char="L" />{name}</summary>
+        <summary on:contextmenu|preventDefault={context.openContext}><TypeIcon char="L" />{name} [{nbt.length}]</summary>
         <ul>
             {#each nbt as tag, i}
                 <NBTTag type={tag[0]} nbt={tag[1]} name={i.toString()} path={[...path, i.toString()]} listChildren={true} />
@@ -91,7 +91,7 @@
 </li>
 
 <ContextMenu bind:this={context}>
-    <li class="menu-title">{path.join("/")}</li>
+    <li class="menu-title">{name}</li>
     <li>
         <details>
             <summary><TypeIcon char="S" />Add at start</summary>

@@ -8,7 +8,7 @@ export const openFile = writable<string | null>(null)
 
 export const changed = writable(false)
 
-export function getDefault(type: string) {
+export function getDefault(type: string): any {
     switch (type) {
         case "Compound":
             return {};

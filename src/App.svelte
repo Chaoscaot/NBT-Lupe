@@ -123,9 +123,6 @@
     }
 </script>
 
-<div class="card">
-    Test2
-</div>
 <ul class="menu overflow-hidden">
 
     {#if $globalNbt}
