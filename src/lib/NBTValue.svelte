@@ -102,6 +102,7 @@
 </li>
 
 <ContextMenu bind:this={context}>
+    <li class="menu-title">{path.join("/")}</li>
     <li><a href="#" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
 </ContextMenu>
 

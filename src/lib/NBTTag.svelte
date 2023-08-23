@@ -14,7 +14,7 @@
 
 
 {#if type === "Compound"}
-    <NBTCompoundTag nbt={nbt} name={name} path={path}/>
+    <NBTCompoundTag nbt={nbt} name={name} path={path} arrayChild={listChildren}/>
 {:else if type === "List"}
     <NBTList nbt={nbt} name={name} path={path}/>
 {:else if type === "ByteArray" || type === "IntArray" || type === "LongArray"}

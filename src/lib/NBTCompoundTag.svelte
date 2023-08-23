@@ -1,7 +1,7 @@
 <script lang="ts">
     import NBTTag from "./NBTTag.svelte";
     import TypeIcon from "./TypeIcon.svelte";
-    import {changed, globalNbt} from "../stores/nbt";
+    import {changed, getDefault, globalNbt} from "../stores/nbt";
     import type {NBT} from "../stores/nbt";
     import ContextMenu from "./ContextMenu.svelte";
 
@@ -9,6 +9,7 @@
     let nameEdit = name;
     export let nbt: Record<string, [string, any]>
     export let path: string[];
+    export let arrayChild: boolean = false;
 
     let dialog: HTMLDialogElement;
 
@@ -34,33 +35,9 @@
                     }
                 }
 
-                let val;
-                switch (type) {
-                    case "Compound":
-                        val = {};
-                        break;
-                    case "ByteArray":
-                    case "IntArray":
-                    case "LongArray":
-                    case "List":
-                        val = [];
-                        break;
-                    case "Byte":
-                    case "Short":
-                    case "Int":
-                    case "Long":
-                    case "Float":
-                    case "Double":
-                        val = 0;
-                        break;
-                    case "String":
-                        val = "";
-                        break;
-                }
-
                 for (let i = 0; i < 99; i++) {
                     if (!Object.keys(parent).some(value => value === "New" + type + (i == 0?'':i))) {
-                        parent["New" + type + (i == 0?'':i)] = [type as any, val];
+                        parent["New" + type + (i == 0?'':i)] = [type as any, getDefault(type)];
                         break;
                     }
                 }
@@ -74,9 +51,10 @@
     function del() {
         globalNbt.update(v => {
             let current: NBT = v[path[0]];
-            let parent: { [key: string]: NBT } = v;
+            let parent: { [key: string]: NBT } | NBT[] = v;
             for (let i = 1; i < path.length; i++) {
                 if (current["0"] === "List") {
+                    parent = current["1"];
                     current = current["1"][path[i]];
                 } else if (current["0"] === "Compound") {
                     parent = current["1"];
@@ -86,10 +64,15 @@
                 }
             }
 
-            delete parent[name];
+            if (arrayChild && Array.isArray(parent)) {
+                parent.splice(parseInt(name), 1);
+            } else {
+                delete parent[name];
+            }
 
             return v;
         })
+        context.close();
         changed.set(true);
     }
 
@@ -133,7 +116,7 @@
 
 <li>
     <details open={Object.entries(nbt).length < 15}>
-        <summary on:contextmenu|preventDefault={context.openContext}><TypeIcon char="C"/>{name}</summary>
+        <summary on:contextmenu|preventDefault={context.openContext}><TypeIcon char="C"/>{name} [{Object.keys(nbt).length}]</summary>
         <ul>
             {#each Object.entries(nbt) as [key, tag]}
                 <NBTTag type={tag[0]} name={key} nbt={tag[1]} path={[...path, key]} />
@@ -174,7 +157,9 @@
     <li><a href="#" on:click|preventDefault={addTag("IntArray")}><TypeIcon char="IA" />IntArray</a></li>
     <li><a href="#" on:click|preventDefault={addTag("LongArray")}><TypeIcon char="LA" />LongArray</a></li>
     {#if path.length > 0}
-        <li><a href="#" on:click|preventDefault={openRename}><TypeIcon color="bg-blue-500" char="R" />Rename</a></li>
+        {#if !arrayChild}
+            <li><a href="#" on:click|preventDefault={openRename}><TypeIcon color="bg-blue-500" char="R" />Rename</a></li>
+        {/if}
         <li><a href="#" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
     {/if}
 </ContextMenu>
