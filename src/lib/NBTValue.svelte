@@ -13,6 +13,7 @@
     let typeEdit: string = type;
     export let path: string[];
     export let listChildren: boolean = false;
+    export let arrayChildren: boolean = false;
 
     let dialog: HTMLDialogElement;
     let context: ContextMenu;
@@ -26,15 +27,17 @@
         globalNbt.update(v => {
             let current: NBT = v[path[0]];
             let parent: { [key: string]: NBT } = v;
-            let listParent: number[] | null = null
+            let arrayParent: number[] | null = null
+            let listParent: NBT[] | null = null
             for (let i = 1; i < path.length; i++) {
                 if (current["0"] === "List") {
+                    listParent = current["1"];
                     current = current["1"][path[i]];
                 } else if (current["0"] === "Compound") {
                     parent = current["1"];
                     current = current["1"][path[i]];
                 } else if (current["0"] === "ByteArray" || current["0"] === "IntArray" || current["0"] === "LongArray") {
-                    listParent = current["1"];
+                    arrayParent = current["1"];
                     current = current["1"][path[i]];
                 } else {
                     current = current["1"][path[i]];
@@ -42,7 +45,9 @@
             }
 
             if (listChildren) {
-                listParent[name] = valueEdit;
+                listParent[Number.parseInt(name)] = [typeEdit as any, valueEdit];
+            } else if (arrayChildren) {
+                arrayParent[name] = valueEdit;
             } else {
                 if(name != nameEdit) {
                     delete parent[name];
@@ -103,17 +108,22 @@
 
 <ContextMenu bind:this={context}>
     <li class="menu-title">{name}</li>
-    <li><a href="#" on:click|preventDefault={() => {context.close(); open()}}><TypeIcon color="bg-blue-500" char="E" />Edit</a></li>
-    <li><a href="#" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
+    <div on:click={context.close}>
+        <slot name="context"></slot>
+    </div>
+    <li><a href="/" on:click|preventDefault={() => {context.close(); open()}}><TypeIcon color="bg-blue-500" char="E" />Edit</a></li>
+    <li><a href="/" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
 </ContextMenu>
 
 <dialog bind:this={dialog} class="modal">
     <form class="modal-box" on:submit|preventDefault>
         <h1 class="mb-4">Edit {name}</h1>
         <div class="flex flex-col gap-4">
-            {#if !listChildren}
+            {#if !arrayChildren && !listChildren}
                 <label class="label">Name</label>
                 <input type="text" bind:value={nameEdit} class="input input-bordered w-full max-w-xs" />
+            {/if}
+            {#if !arrayChildren}
                 <label class="label">Type</label>
                 <select bind:value={typeEdit} class="select w-full max-w-xs select-bordered">
                     <option value="Byte">Byte</option>

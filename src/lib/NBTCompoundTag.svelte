@@ -126,7 +126,7 @@
 
 <li id={path.join("/")}>
     <details open={Object.entries(nbt).length < 15}>
-        <summary on:contextmenu|preventDefault={context.openContext} on:click={middleClick}><TypeIcon char="C"/>{name} [{Object.keys(nbt).length}]</summary>
+        <summary on:contextmenu|preventDefault={context.openContext} on:click={middleClick}><TypeIcon char="C"/>{name}: {Object.keys(nbt).length}</summary>
         <ul>
             {#each Object.entries(nbt) as [key, tag]}
                 <NBTTag type={tag[0]} name={key} nbt={tag[1]} path={[...path, key]} />
@@ -154,22 +154,25 @@
 
 <ContextMenu bind:this={context}>
     <li class="menu-title">{name}</li>
-    <li><a href="#" on:click|preventDefault={addTag("Compound")}><TypeIcon char="C" />Add Compound</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("List")}><TypeIcon char="L" />Add List</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Byte")}><TypeIcon char="B" />Byte</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Short")}><TypeIcon char="S" />Short</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Int")}><TypeIcon char="I" />Int</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Long")}><TypeIcon char="L" />Long</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Float")}><TypeIcon char="F" />Float</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("Double")}><TypeIcon char="D" />Double</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("String")}><TypeIcon char="S" />String</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("ByteArray")}><TypeIcon char="BA" />ByteArray</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("IntArray")}><TypeIcon char="IA" />IntArray</a></li>
-    <li><a href="#" on:click|preventDefault={addTag("LongArray")}><TypeIcon char="LA" />LongArray</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Compound")}><TypeIcon char="C" />Add Compound</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("List")}><TypeIcon char="L" />Add List</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Byte")}><TypeIcon char="B" />Byte</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Short")}><TypeIcon char="S" />Short</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Int")}><TypeIcon char="I" />Int</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Long")}><TypeIcon char="L" />Long</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Float")}><TypeIcon char="F" />Float</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("Double")}><TypeIcon char="D" />Double</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("String")}><TypeIcon char="S" />String</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("ByteArray")}><TypeIcon char="BA" />ByteArray</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("IntArray")}><TypeIcon char="IA" />IntArray</a></li>
+    <li><a href="/" on:click|preventDefault={addTag("LongArray")}><TypeIcon char="LA" />LongArray</a></li>
+    <div on:click={context.close}>
+        <slot name="context"></slot>
+    </div>
     {#if path.length > 0}
         {#if !arrayChild}
-            <li><a href="#" on:click|preventDefault={openRename}><TypeIcon color="bg-blue-500" char="R" />Rename</a></li>
+            <li><a href="/" on:click|preventDefault={openRename}><TypeIcon color="bg-blue-500" char="R" />Rename</a></li>
         {/if}
-        <li><a href="#" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
+        <li><a href="/" on:click|preventDefault={del}><TypeIcon color="bg-red-500" char="D" />Delete</a></li>
     {/if}
 </ContextMenu>

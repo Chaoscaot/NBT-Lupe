@@ -28,3 +28,25 @@ export function getDefault(type: string): any {
             return "";
     }
 }
+
+export function getThis(v: { [key: string]: NBT }, path: string[]): NBT {
+    let current: NBT = v[path[0]];
+    for (let i = 1; i < path.length; i++) {
+        current = current["1"][path[i]];
+    }
+
+    return current;
+}
+
+export function getParent(v: { [key: string]: NBT }, path: string[]): { [key: string]: NBT } | NBT[] {
+    let current: NBT = v[path[0]];
+    let parent: { [key: string]: NBT } | NBT[] = v;
+    for (let i = 1; i < path.length; i++) {
+        if (current["0"] === "List" || current["0"] === "Compound") {
+            parent = current["1"];
+        }
+        current = current["1"][path[i]];
+    }
+
+    return parent;
+}

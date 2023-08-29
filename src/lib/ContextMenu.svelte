@@ -49,7 +49,8 @@
     }
 
     export function close() {
-        cOpen = false;
+        setTimeout(() =>
+            cOpen = false)
     }
 </script>
 

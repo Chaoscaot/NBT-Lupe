@@ -1,5 +1,4 @@
 <script lang="ts">
-
     import NBTCompoundTag from "./NBTCompoundTag.svelte";
     import NBTList from "./NBTList.svelte";
     import NBTValue from "./NBTValue.svelte";
@@ -10,15 +9,32 @@
     export let nbt: any;
     export let path: string[];
     export let listChildren: boolean = false;
+    export let arrayChildren: boolean = false;
 </script>
 
 
 {#if type === "Compound"}
-    <NBTCompoundTag nbt={nbt} name={name} path={path} arrayChild={listChildren}/>
+    <NBTCompoundTag nbt={nbt} name={name} path={path} arrayChild={listChildren}>
+        <svelte:fragment slot="context">
+            <slot name="context"></slot>
+        </svelte:fragment>
+    </NBTCompoundTag>
 {:else if type === "List"}
-    <NBTList nbt={nbt} name={name} path={path}/>
+    <NBTList nbt={nbt} name={name} path={path} listChildren={listChildren}>
+        <svelte:fragment slot="context">
+            <slot name="context"></slot>
+        </svelte:fragment>
+    </NBTList>
 {:else if type === "ByteArray" || type === "IntArray" || type === "LongArray"}
-    <NBTByteArray data={nbt} name={name} type={type} path={path} />
+    <NBTByteArray bind:data={nbt} name={name} type={type} path={path} listChildren={listChildren}>
+        <svelte:fragment slot="context">
+            <slot name="context"></slot>
+        </svelte:fragment>
+    </NBTByteArray>
 {:else}
-    <NBTValue type={type} name={name} value={nbt} path={path} listChildren={listChildren} />
+    <NBTValue type={type} name={name} value={nbt} path={path} listChildren={listChildren} arrayChildren={arrayChildren}>
+        <svelte:fragment slot="context">
+            <slot name="context"></slot>
+        </svelte:fragment>
+    </NBTValue>
 {/if}
